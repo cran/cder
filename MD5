@@ -1,0 +1,14 @@
+49911cc08237910d7574fcea35a71515 *DESCRIPTION
+4099497c32314db9c003c37b5be481db *NAMESPACE
+595469c898844223bb480e2e7a44d4fe *R/package.r
+45979fa06b52d965bb5cd10cb2371acd *R/query.r
+f752f36110429276deb2c5f6b10d40ff *R/zzz.r
+96db01bdfc157c7d7d39b72b65b874d4 *build/vignette.rds
+9b6005577a3f4643cba697c460ef5649 *inst/doc/quickstart.html
+40b729894bd27a40dd3d5e305ddd236f *inst/doc/quickstart.rmd
+706649e2630239a8f931b685ef990a07 *man/basic_query.Rd
+b4899436e6629dfa94be904177204a8d *man/cder.Rd
+b35957c3935aa527248306c20c0f6f48 *man/cder_handle.Rd
+e5ee8a5f8345f94a2fbb56dfb8246f4e *man/cder_query.Rd
+5002cbedb27c1e7648d66ba732ebe170 *man/figures/logo.png
+40b729894bd27a40dd3d5e305ddd236f *vignettes/quickstart.rmd
