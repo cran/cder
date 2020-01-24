@@ -1,6 +1,6 @@
 Package: cder
 Title: Interface to the California Data Exchange Center
-Version: 0.2-1
+Version: 0.2-2
 Authors@R: 
     person(given = "Michael",
            family = "Koohafkan",
@@ -25,8 +25,8 @@ Suggests: knitr (>= 1.26), rmarkdown (>= 2.0), testthat (>= 2.3)
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
 NeedsCompilation: no
-Packaged: 2020-01-13 16:47:55 UTC; mkoohafk
+Packaged: 2020-01-24 18:04:05 UTC; mkoohafk
 Author: Michael Koohafkan [aut, cre]
 Maintainer: Michael Koohafkan <michael.koohafkan@gmail.com>
 Repository: CRAN
-Date/Publication: 2020-01-13 17:00:09 UTC
+Date/Publication: 2020-01-24 18:20:05 UTC

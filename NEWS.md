@@ -1,3 +1,12 @@
+# cder 0.2-2
+
+## Bug Fixes
+
+CDEC actually accounts for daylight savings time as documented in 
+https://info.water.ca.gov/misc/sql_dates.html. The correct timezone 
+timezone "US/Pacific" is now used.
+
+
 # cder 0.2-1
 
 ## Bug Fixes
@@ -18,10 +27,10 @@ this package were updated to accomodate this new format.
 
 Some functions were renamed and arguments were added to support
 drop-in replacement of cder for the now-removed package 
-CDECRetrieve. Old function names have been soft-deprecated.
+'CDECRetrieve'. Old function names have been soft-deprecated.
 
-## NEw functions
+## New functions
 
 New functions `cdec_search_*()` were added to support the exploration of metadata
-on CDEC. These are largely just wrappers around browseURL(), 
+on CDEC. These are largely just wrappers around `browseURL()`, 
 since the CDEC web services do not currently support metadata searches.
