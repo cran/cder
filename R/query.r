@@ -1,4 +1,13 @@
 cdec.tz = "US/Pacific"
+valid.durations = c("E", "H", "D", "M")
+
+single_query_url = "https://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet"
+group_query_url = "http://cdec.water.ca.gov/dynamicapp/req/CSVGroupServlet"
+
+#' @importFrom readr problems
+#' @export
+readr::problems
+
 
 #' Query CDEC
 #'
@@ -6,11 +15,12 @@ cdec.tz = "US/Pacific"
 #'
 #' @param stations A vector of station codes.
 #' @param sensors A vector of sensor numbers.
-#' @param durations A vector of durations.
+#' @param durations A vector of durations. Possible duration codes are
+#'   `"E"` (event), `"H"` (hourly), `"D"` (daily), and `"M"` (monthly).
 #' @param start.date The start date of the query.
 #' @param end.date The end date of the query.
 #' @param ... Not used.
-#' @return A dataframe.
+#' @return A tibble.
 #'
 #' @details Note that CDEC timestamps are in Pacific Time and
 #'   Daylight Savings adjustments are reflected. In R, this is
@@ -21,12 +31,10 @@ cdec.tz = "US/Pacific"
 #'   cdec_query("NSL", 100, "E", Sys.Date() - 5, Sys.Date())
 #' }
 #'
-#' @importFrom tibble tibble as_tibble
-#' @importFrom dplyr rename transmute if_else near
-#' @importFrom stringr str_c str_trim str_to_upper str_sub
-#' @importFrom lubridate ymd_hms as_date
+#' @importFrom dplyr rename
+#' @importFrom stringr str_c str_to_upper str_sub
+#' @importFrom lubridate as_date
 #' @importFrom glue glue
-#' @importFrom rlang .data
 #' @export
 cdec_query = function(stations, sensors, durations, start.date, end.date, ...) {
   if (missing(stations)) {
@@ -42,8 +50,11 @@ cdec_query = function(stations, sensors, durations, start.date, end.date, ...) {
   if (missing(durations)) {
     duration.comp = ""
   } else {
-    durations = match.arg(str_to_upper(str_sub(durations, 1, 1)),
-      c("E", "H", "D", "M"), TRUE)
+    durations = str_to_upper(str_sub(durations, 1, 1))
+    if (!all(durations %in% valid.durations)) {
+      stop("Invalid duration codes detected: ",
+        paste(setdiff(durations, valid.durations), collapse = ", "))
+    }
     duration.comp = glue("&dur_code={str_c(durations, collapse = '%2C')}")
   }
   if (missing(start.date)) {
@@ -60,21 +71,21 @@ cdec_query = function(stations, sensors, durations, start.date, end.date, ...) {
   }
   # query
   result = basic_query(
-    glue("https://cdec.water.ca.gov/dynamicapp/req/CSVDataServlet?",
+    glue("{single_query_url}?",
       "{station.comp}", "{sensor.comp}", "{duration.comp}",
       "{start.comp}", "{end.comp}"),
     station.spec
   )
   rename(result,
-    StationID = .data$STATION_ID,
-    DateTime = .data$`DATE TIME`,
-    SensorType = .data$SENSOR_TYPE,
-    Value = .data$VALUE,
-    DataFlag = .data$DATA_FLAG,
-    SensorUnits = .data$UNITS,
-    SensorNumber = .data$SENSOR_NUMBER,
-    Duration = .data$DURATION,
-    ObsDate = .data$`OBS DATE`
+    StationID = "STATION_ID",
+    DateTime = "DATE TIME",
+    SensorType = "SENSOR_TYPE",
+    Value = "VALUE",
+    DataFlag = "DATA_FLAG",
+    SensorUnits = "UNITS",
+    SensorNumber = "SENSOR_NUMBER",
+    Duration = "DURATION",
+    ObsDate = "OBS DATE"
   )
 }
 
@@ -84,7 +95,7 @@ cdec_query = function(stations, sensors, durations, start.date, end.date, ...) {
 #'
 #' @param groups A vector of group codes.
 #' @inheritParams cdec_query
-#' @return A dataframe.
+#' @return A tibble.
 #'
 #' @details Note that CDEC timestamps are in Pacific Time and
 #'   Daylight Savings adjustments are reflected. In R, this is
@@ -95,12 +106,10 @@ cdec_query = function(stations, sensors, durations, start.date, end.date, ...) {
 #'   cdec_query_group("SR1", Sys.Date() - 5, Sys.Date())
 #' }
 #'
-#' @importFrom tibble tibble as_tibble
-#' @importFrom dplyr rename transmute if_else near
-#' @importFrom stringr str_c str_trim str_to_upper str_sub
-#' @importFrom lubridate ymd_hms as_date
+#' @importFrom dplyr rename
+#' @importFrom stringr str_c str_to_upper str_sub
+#' @importFrom lubridate as_date
 #' @importFrom glue glue
-#' @importFrom rlang .data
 #' @export
 cdec_query_group = function(groups, start.date, end.date, ...) {
   if (missing(groups)) {
@@ -122,21 +131,21 @@ cdec_query_group = function(groups, start.date, end.date, ...) {
   }
   # query
   result = basic_query(
-    glue("http://cdec.water.ca.gov/dynamicapp/req/CSVGroupServlet?",
+    glue("{group_query_url}?",
       "{group.comp}", "{start.comp}", "{end.comp}"),
     group.spec
   )
   rename(result,
-    StationID = .data$STATION_ID,
-    DateTime = .data$ACTUAL_DATE,
-    SensorType = .data$SENSOR_TYPE,
-    Value = .data$VALUE,
-    DataFlag = .data$DATA_FLAG,
-    SensorUnits = .data$UNITS,
-    SensorNumber = .data$SENSOR_NUM,
-    Duration = .data$DUR_CODE,
-    ObsDate = .data$OBS_DATE
-    )
+    StationID = "STATION_ID",
+    DateTime = "ACTUAL_DATE",
+    SensorType = "SENSOR_TYPE",
+    Value = "VALUE",
+    DataFlag = "DATA_FLAG",
+    SensorUnits = "UNITS",
+    SensorNumber = "SENSOR_NUM",
+    Duration = "DUR_CODE",
+    ObsDate = "OBS_DATE"
+  )
 }
 
 #' Basic Query
@@ -147,8 +156,8 @@ cdec_query_group = function(groups, start.date, end.date, ...) {
 #' @return A dataframe.
 #'
 #' @importFrom curl curl_fetch_memory parse_headers
-#' @importFrom readr locale read_csv
-#' @importFrom stringr str_replace_all
+#' @importFrom readr locale read_csv problems
+#' @importFrom stringr str_split
 #' @keywords internal
 basic_query = function(url, col.spec) {
   result = curl_fetch_memory(url, handle = cder_handle())
@@ -160,8 +169,17 @@ basic_query = function(url, col.spec) {
       call. = FALSE)
   value = rawToChar(result$content)
   Encoding(value) = "UTF-8"
-  read_csv(value, locale = locale(tz = cdec.tz),
+  res = read_csv(value, locale = locale(tz = cdec.tz),
     na = "---", col_types = col.spec)
+  if (nrow(problems(res)) > 0L) {
+    problem_tf = tempfile(fileext = ".csv")
+    problem_rows = str_split(value, "\r\n",
+      simplify = TRUE)[c(1, problems(res)$row)]
+    writeLines(problem_rows, problem_tf)
+    warning("Parsing problems detected. Output written to ",
+      problem_tf, call. = FALSE)
+  }
+  res
 }
 
 #' cder curl handle

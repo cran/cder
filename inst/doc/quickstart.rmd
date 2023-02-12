@@ -1,7 +1,7 @@
 ---
 title: "Quick Start with CDER"
 author: "Michael Koohafkan"
-date: "2019-12-20"
+date: "2023-02-12"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Quick Start}
@@ -18,58 +18,43 @@ station code to `cdec_query()`:
 
 
 ```r
-library(cder)
-# get data for CDEC station NSL 
+# get data for CDEC station NSL
 cdec_query("NSL")
-#> # A tibble: 577 x 9
-#>    StationID Duration SensorNumber SensorType DateTime           
-#>    <chr>     <chr>           <int> <chr>      <dttm>             
-#>  1 NSL       E                   1 RIV STG    2019-12-20 02:30:00
-#>  2 NSL       E                   1 RIV STG    2019-12-20 02:45:00
-#>  3 NSL       E                   1 RIV STG    2019-12-20 03:00:00
-#>  4 NSL       E                   1 RIV STG    2019-12-20 03:15:00
-#>  5 NSL       E                   1 RIV STG    2019-12-20 03:30:00
-#>  6 NSL       E                   1 RIV STG    2019-12-20 03:45:00
-#>  7 NSL       E                   1 RIV STG    2019-12-20 04:00:00
-#>  8 NSL       E                   1 RIV STG    2019-12-20 04:15:00
-#>  9 NSL       E                   1 RIV STG    2019-12-20 04:30:00
-#> 10 NSL       E                   1 RIV STG    2019-12-20 04:45:00
-#> # ... with 567 more rows, and 4 more variables: ObsDate <dttm>, Value <dbl>,
-#> #   DataFlag <chr>, SensorUnits <chr>
 ```
 
 The CDEC web service uses some default values for the duration code,
-sensor number, and start/end dates. You can also specify these 
-yourself:
+sensor number, and start/end dates. However, these default values vary
+from station to station, and sometimes a station will return no data by
+default. It's generally a good idea to specify these yourself:
 
 
 ```r
 station = "NSL"
-duration = "event"
+duration = "event" # or "E"
 sensor = 100 # electrical conductivity
-start.date = Sys.Date() - 14
-end.date = Sys.Date()
+start.date = "2023-01-01"
+end.date = "2023-01-05"
 
 cdec_query(station, sensor, duration, start.date, end.date)
-#> # A tibble: 1,345 x 9
-#>    StationID Duration SensorNumber SensorType DateTime           
-#>    <chr>     <chr>           <int> <chr>      <dttm>             
-#>  1 NSL       E                 100 EL COND    2019-12-06 00:00:00
-#>  2 NSL       E                 100 EL COND    2019-12-06 00:15:00
-#>  3 NSL       E                 100 EL COND    2019-12-06 00:30:00
-#>  4 NSL       E                 100 EL COND    2019-12-06 00:45:00
-#>  5 NSL       E                 100 EL COND    2019-12-06 01:00:00
-#>  6 NSL       E                 100 EL COND    2019-12-06 01:15:00
-#>  7 NSL       E                 100 EL COND    2019-12-06 01:30:00
-#>  8 NSL       E                 100 EL COND    2019-12-06 01:45:00
-#>  9 NSL       E                 100 EL COND    2019-12-06 02:00:00
-#> 10 NSL       E                 100 EL COND    2019-12-06 02:15:00
-#> # ... with 1,335 more rows, and 4 more variables: ObsDate <dttm>,
-#> #   Value <dbl>, DataFlag <chr>, SensorUnits <chr>
+#> # A tibble: 385 × 9
+#>    Stati…¹ Durat…² Senso…³ Senso…⁴ DateTime            ObsDate             Value
+#>    <chr>   <chr>     <int> <chr>   <dttm>              <dttm>              <dbl>
+#>  1 NSL     E           100 EL COND 2023-01-01 00:00:00 2023-01-01 00:00:00  6015
+#>  2 NSL     E           100 EL COND 2023-01-01 00:15:00 2023-01-01 00:15:00  6019
+#>  3 NSL     E           100 EL COND 2023-01-01 00:30:00 2023-01-01 00:30:00  6075
+#>  4 NSL     E           100 EL COND 2023-01-01 00:45:00 2023-01-01 00:45:00  6151
+#>  5 NSL     E           100 EL COND 2023-01-01 01:00:00 2023-01-01 01:00:00  6283
+#>  6 NSL     E           100 EL COND 2023-01-01 01:15:00 2023-01-01 01:15:00  6310
+#>  7 NSL     E           100 EL COND 2023-01-01 01:30:00 2023-01-01 01:30:00  6360
+#>  8 NSL     E           100 EL COND 2023-01-01 01:45:00 2023-01-01 01:45:00  6408
+#>  9 NSL     E           100 EL COND 2023-01-01 02:00:00 2023-01-01 02:00:00  6425
+#> 10 NSL     E           100 EL COND 2023-01-01 02:15:00 2023-01-01 02:15:00  6444
+#> # … with 375 more rows, 2 more variables: DataFlag <chr>, SensorUnits <chr>,
+#> #   and abbreviated variable names ¹​StationID, ²​Duration, ³​SensorNumber,
+#> #   ⁴​SensorType
 ```
 
-The web service supports multiple stations, sensors, and even 
-duration codes:
+The web service supports multiple stations and sensors:
 
 
 ```r
@@ -77,31 +62,58 @@ duration codes:
 stations = c("NSL", "HUN")
 # get electrical conductivity and stage
 sensors = c(100, 1)
-# get event data and hourly averages (where available)
-durations = c("event", "hourly")
+start.date = "2023-01-01"
+end.date = "2023-01-05"
 
-cdec_query(stations, sensors, durations)
-#> # A tibble: 240 x 9
-#>    StationID Duration SensorNumber SensorType DateTime           
-#>    <chr>     <chr>           <int> <chr>      <dttm>             
-#>  1 HUN       E                   1 RIV STG    2019-12-20 02:30:00
-#>  2 HUN       E                   1 RIV STG    2019-12-20 02:45:00
-#>  3 HUN       E                   1 RIV STG    2019-12-20 03:00:00
-#>  4 HUN       E                   1 RIV STG    2019-12-20 03:15:00
-#>  5 HUN       E                   1 RIV STG    2019-12-20 03:30:00
-#>  6 HUN       E                   1 RIV STG    2019-12-20 03:45:00
-#>  7 HUN       E                   1 RIV STG    2019-12-20 04:00:00
-#>  8 HUN       E                   1 RIV STG    2019-12-20 04:15:00
-#>  9 HUN       E                   1 RIV STG    2019-12-20 04:30:00
-#> 10 HUN       E                   1 RIV STG    2019-12-20 04:45:00
-#> # ... with 230 more rows, and 4 more variables: ObsDate <dttm>, Value <dbl>,
-#> #   DataFlag <chr>, SensorUnits <chr>
+cdec_query(stations, sensors, "hourly", start.date, end.date)
+#> # A tibble: 388 × 9
+#>    Stati…¹ Durat…² Senso…³ Senso…⁴ DateTime            ObsDate             Value
+#>    <chr>   <chr>     <int> <chr>   <dttm>              <dttm>              <dbl>
+#>  1 NSL     H           100 EL COND 2023-01-01 00:00:00 2023-01-01 00:00:00  6015
+#>  2 NSL     H           100 EL COND 2023-01-01 01:00:00 2023-01-01 01:00:00  6283
+#>  3 NSL     H           100 EL COND 2023-01-01 02:00:00 2023-01-01 02:00:00  6425
+#>  4 NSL     H           100 EL COND 2023-01-01 03:00:00 2023-01-01 03:00:00  6471
+#>  5 NSL     H           100 EL COND 2023-01-01 04:00:00 2023-01-01 04:00:00  6230
+#>  6 NSL     H           100 EL COND 2023-01-01 05:00:00 2023-01-01 05:00:00  5925
+#>  7 NSL     H           100 EL COND 2023-01-01 06:00:00 2023-01-01 06:00:00  4668
+#>  8 NSL     H           100 EL COND 2023-01-01 07:00:00 2023-01-01 07:00:00  3991
+#>  9 NSL     H           100 EL COND 2023-01-01 08:00:00 2023-01-01 08:00:00  3700
+#> 10 NSL     H           100 EL COND 2023-01-01 09:00:00 2023-01-01 09:00:00  4757
+#> # … with 378 more rows, 2 more variables: DataFlag <chr>, SensorUnits <chr>,
+#> #   and abbreviated variable names ¹​StationID, ²​Duration, ³​SensorNumber,
+#> #   ⁴​SensorType
+```
+
+Certain CDEC stations may store non-numeric data flags in the Value
+column instead of in the DataFlag column, resulting in parsing issues.
+For example, flow data at SGN (Sugar Creek near Callahan) will
+sometimes use the codes "ART" and "BRT" to signify discharge at stages
+above or below the available rating table. `cder` reexports 
+`readr::problems()` to allow you to view these parsing problems, and
+additionally writes the problematic rows to a temporary file to
+facilitate further investigation.
+
+
+```r
+sgn = cdec_query('SGN', 20, start.date = "2022-07-02",
+  end.date = "2022-07-03")
+#> Warning: One or more parsing issues, call `problems()` on your data
+#> frame for details, e.g.:
+#>   dat <- vroom(...)
+#>   problems(dat)
+#> Warning: Parsing problems detected. Output written to
+#> C:\Users\michael\AppData\Local\Temp\RtmpqOnwQX\file478447f97f36.csv
+problems(sgn)
+#> # A tibble: 1 × 5
+#>     row   col expected actual file                                              
+#>   <int> <int> <chr>    <chr>  <chr>                                             
+#> 1    26     7 a double BRT    C:/Users/michael/AppData/Local/Temp/RtmpqOnwQX/fi…
 ```
 
 That's it! The CDEC Webservice currently does not support querying 
 station metadata. To browse station data, use the 
-[Station Search tool](https://cdec.water.ca.gov/dynamicapp/staSearch)
-or [Locator Map](http://cdec.water.ca.gov/cdecstation2/). These
+[Station Search tool](http://cdec.water.ca.gov/dynamicapp/staSearch)
+or [Locator Map](https://cdec.water.ca.gov/webgis/?appid=cdecstation). These
 URLs can also be accessed by calling `cdec_search_stations()` and 
 `cdec_map()`, respectively. See `help("cdec-search")` for more 
 information.To access the metadata page for a particular station, use
