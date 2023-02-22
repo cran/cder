@@ -1,5 +1,5 @@
 test_that("query works", {
-  skip_on_cran()
+  skip_if_offline("cdec.water.ca.gov")
 
   expect_warning(cdec_query("NSL", 100, "E", Sys.Date() - 5, Sys.Date()), NA)
   expect_warning(cdec_query_group("SR1", Sys.Date() - 5, Sys.Date()), NA)
@@ -7,6 +7,8 @@ test_that("query works", {
 
 
 test_that("vignette queries work", {
+  skip_if_offline("cdec.water.ca.gov")
+
   station = "NSL"
   duration = "event" # or "E"
   sensor = 100 # electrical conductivity

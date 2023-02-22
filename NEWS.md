@@ -1,12 +1,18 @@
+# cder 0.3-1
+
+- This patch version fixes an issue in package tests that cause CRAN
+  checks to occasionally fail.
+
+
 # cder 0.3-0
 
 ## Minor changes
 
-- `cder` now reexports readr::problems() so that users can review
-  parsing issues without loading readr
-- `cder` now writes the downloaded data to a tempfile when problems are
-  encountered so that the user can review reprocess using an alternate
-  approach if needed. 
+- `cder` now reexports `readr::problems()` so that users can review
+  parsing issues without loading `readr`.
+- `cder` now writes the unparsed lines to a tempfile when problems are
+  encountered so that the user can review and reprocess using an
+  alternate approach if needed. 
 
 
 # cder 0.2-2

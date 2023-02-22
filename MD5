@@ -1,6 +1,6 @@
-e0dde7792d3e2ce1523cd01e26e980fd *DESCRIPTION
+bbadb13075f1ec54b30e461558374945 *DESCRIPTION
 a9e7253c3fd6bc4b50d50c722d7f819a *NAMESPACE
-504c4c84c7b657274e50c67efb5d6924 *NEWS.md
+b594c071520576a77d1a0951f4837715 *NEWS.md
 1215528078124826298fca560775001c *R/deprecated.r
 55231c74fc74940a11bc1ad2911ba395 *R/list.r
 e7a5be72751f88870fd5eabc9bc65e68 *R/package.r
@@ -25,7 +25,7 @@ b35957c3935aa527248306c20c0f6f48 *man/cder_handle.Rd
 eb24cb1e8f0197c6f50858bb09b5aa07 *man/station.spec.Rd
 837d821304bda4b7dbc2fc6f4e2126b7 *tests/testthat.R
 b3912d3a07fd4f6ed50598b0ff90cee5 *tests/testthat/_snaps/query.md
-45c2126947df859dfacd093692950b61 *tests/testthat/test-list.R
-0ce2f51656693536feecaf36bdce9b45 *tests/testthat/test-query.R
-7f1b190ddbb2e62f81c476de1ad59cfe *tests/testthat/test-urls.R
+f11b2324f3ce8978fce505d23c01156d *tests/testthat/test-list.R
+8ead094a086d664e3a53bb5e9502dd85 *tests/testthat/test-query.R
+9b46bcc96403d72c7deca6a7e3b27567 *tests/testthat/test-urls.R
 b5debf58feb03716a79e7655e860a0ac *vignettes/quickstart.rmd

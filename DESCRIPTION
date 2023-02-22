@@ -1,6 +1,6 @@
 Package: cder
 Title: Interface to the California Data Exchange Center (CDEC)
-Version: 0.3-0
+Version: 0.3-1
 Authors@R: 
     person(given = "Michael",
            family = "Koohafkan",
@@ -24,8 +24,8 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2023-02-12 17:52:02 UTC; michael
+Packaged: 2023-02-20 04:30:59 UTC; michael
 Author: Michael Koohafkan [aut, cre]
 Maintainer: Michael Koohafkan <michael.koohafkan@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-02-12 18:12:06 UTC
+Date/Publication: 2023-02-22 09:20:09 UTC
